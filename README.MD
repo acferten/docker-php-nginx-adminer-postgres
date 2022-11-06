@@ -6,7 +6,7 @@ Workspace with php, nginx, adminer, postgresql
 
 Clone the repository
 
-`git clone https://github.com/acferten/first_week`
+`git clone https://github.com/acferten/docker-php-nginx-adminer-postgres`
 
 ## 2. Project settings
 *Note: settings are in .env file*
