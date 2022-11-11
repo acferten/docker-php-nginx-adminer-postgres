@@ -31,7 +31,6 @@ services:
     networks:
       - php-nginx-postgres-network
 
-
   adminer:
     image: adminer
     restart: unless-stopped
@@ -43,7 +42,6 @@ services:
       - db
     networks:
       - php-nginx-postgres-network
-
 
   db:
     image: postgres:alpine
