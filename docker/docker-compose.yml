@@ -4,16 +4,18 @@ services:
   #Image for php
   web:
     build:
-      context: ./images/php
+      context: images/php
     container_name: php
     restart: unless-stopped
     volumes:
-      - ./:/var/www
+      - ../www:/var/www
+    networks:
+      - nginx-php-postgres-network
 
   #Image for proxy server
   proxy:
     build:
-      context: ./images/proxy
+      context: images/proxy
     container_name: proxy
     image: nginx
     restart: unless-stopped
@@ -23,8 +25,17 @@ services:
     depends_on:
       - web
     volumes:
-      - ./:/var/www
-      - ./images/proxy/:/etc/nginx/conf.d/
+      - ../www/public:/var/www/public
+      - ./images/proxy:/etc/nginx/conf.d/
+    networks:
+      - nginx-php-postgres-network
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    container_name: adminer
+    networks:
+      - nginx-php-postgres-network
 
   db:
     image: postgres:alpine
@@ -38,7 +49,13 @@ services:
       - "5432:5432"
     volumes:
       - dbdata:/var/lib/postgres
+    networks:
+      - nginx-php-postgres-network
 
 volumes:
   dbdata:
     driver: local
+
+networks:
+  nginx-php-postgres-network:
+    driver: bridge

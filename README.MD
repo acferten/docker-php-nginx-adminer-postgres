@@ -11,6 +11,8 @@ Clone the repository
 ## 2. Project settings
 *Note: settings are in .env file*
 
+Rename .example-env to .env in the "docker" folder and change the values of variables to yours
+
 | Argument | Description |
 | -----|------|
 | USER_LOGIN | User login. Used as a database access login |
@@ -23,9 +25,13 @@ Clone the repository
 *Note: for the project to work, you must have docker and docker-compose installed*
 *Note: Run inside the project directory*
 
+`cd docker`
+
 `docker-compose -f docker-compose.prod.yml up -d`
 
 ## 3. Run project as development build
 *Note: Run inside the project directory*
+
+`cd docker`
 
 `docker-compose up --build`
