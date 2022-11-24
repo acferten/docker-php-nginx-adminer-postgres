@@ -17,7 +17,6 @@ services:
     build:
       context: images/proxy
     container_name: proxy
-    image: nginx
     restart: unless-stopped
     ports:
       - ${WEB_PORT:-80}:80
