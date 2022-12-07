@@ -2,25 +2,44 @@ FROM php:8.1-fpm-alpine
 
 WORKDIR /var/www
 
-RUN apk add bash
-RUN apk add curl
-
+#install packages
 RUN apk update && apk add \
     build-base \
-    vim
+    vim \
+    bash \
+    curl
 
-RUN set -ex \
-  && apk --no-cache add \
-    postgresql-dev
+# Install extensions
+RUN curl -sSLf \
+            -o /usr/local/bin/install-php-extensions \
+            https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions
+RUN chmod +x /usr/local/bin/install-php-extensions
+RUN install-php-extensions \
+            pdo \
+            pdo_pgsql \
+            xdebug
 
-RUN docker-php-ext-install pdo pdo_pgsql
+#install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+# Add ini-files
+COPY ./php.ini /usr/local/etc/php/conf.d/40-custom.ini
+COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
+# Replace env variables in xdebug.ini
+RUN sed -i 's#{{DOCKER_HOST_IP}}#'$DOCKER_HOST_IP'#g' /usr/local/etc/php/conf.d/xdebug.ini
+
+# Run composer install
+#RUN composer install - закоменченно, так как пока нет laravel проекта
+
+# Clean
+RUN rm -rf /var/cache/apk/* && docker-php-source delete
+
+# Create a non-root user
 RUN addgroup -g 1000 -S www && \
     adduser -u 1000 -S www -G www
 
+# Change current user to non-root user
 USER www
-
-COPY --chown=www:www . /var/www
 
 EXPOSE 9000
