@@ -1,4 +1,4 @@
-FROM php:8.1-fpm-alpine
+FROM php:8.2-fpm-alpine
 
 WORKDIR /var/www
 
@@ -16,8 +16,7 @@ RUN curl -sSLf \
 RUN chmod +x /usr/local/bin/install-php-extensions
 RUN install-php-extensions \
             pdo \
-            pdo_pgsql \
-            xdebug
+            pdo_pgsql
 
 #install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
