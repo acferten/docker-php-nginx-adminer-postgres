@@ -23,10 +23,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # Add ini-files
 COPY ./php.ini /usr/local/etc/php/conf.d/40-custom.ini
-COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
-
-# Replace env variables in xdebug.ini
-RUN sed -i 's#{{DOCKER_HOST_IP}}#'$DOCKER_HOST_IP'#g' /usr/local/etc/php/conf.d/xdebug.ini
 
 # Run composer install
 #RUN composer install - закоменченно, так как пока нет laravel проекта
